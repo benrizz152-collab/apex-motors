@@ -13,7 +13,7 @@ async function loadVehicles() {
     const container = document.getElementById("vehicle-container");
 
     try {
-        const response = await fetch("http://localhost:3000/api/vehicles");
+        const response = await fetch("https://apex-motors-vl27.onrender.com/api/vehicles");
 
         if (!response.ok) {
             throw new Error("Failed to load vehicles.");
@@ -250,7 +250,7 @@ async function submitForm(event) {
     }
 
     try {
-        const response = await fetch("http://localhost:3000/api/inquiries", {
+        const response = await fetch("https://apex-motors-vl27.onrender.com/api/inquiries", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
