@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Apex Motors | Admin Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f5f9;
+            color: #202938;
+        }
+
+        header {
+            background: #101827;
+            color: white;
+            padding: 22px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        header span {
+            color: #d4af37;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            border: 1px solid #d4af37;
+            padding: 10px 16px;
+            border-radius: 5px;
+        }
+
+        main {
+            width: 90%;
+            max-width: 1200px;
+            margin: 35px auto;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            margin-bottom: 8px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .stat-card p {
+            color: #657084;
+            margin-bottom: 12px;
+        }
+
+        .stat-card h3 {
+            font-size: 27px;
+            color: #101827;
+        }
+
+        .inventory {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+            overflow-x: auto;
+        }
+
+        .inventory h2 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e7eaf0;
+        }
+
+        th {
+            background: #f3f5f9;
+        }
+
+        .vehicle-image {
+            width: 85px;
+            height: 55px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        button {
+            border: none;
+            padding: 9px 13px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 3px;
+        }
+
+        .edit-button {
+            background: #dceafe;
+            color: #174ea6;
+        }
+
+        .delete-button {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .status {
+            margin: 15px 0;
+            color: #475569;
+        }
+
+        @media (max-width: 600px) {
+            main {
+                width: 94%;
+            }
+
+            .inventory {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>APEX <span>MOTORS</span></h1>
+        <a href="index.html">Back to Website</a>
+    </header>
+
+    <main>
+
+        <section class="welcome">
+            <h2>Admin Dashboard</h2>
+            <p>Manage your vehicle inventory and monitor your dealership.</p>
+        </section>
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <p>Total Vehicles</p>
+                <h3 id="total-vehicles">0</h3>
+            </div>
+
+            <div class="stat-card">
+                <p>Total Inventory Value</p>
+                <h3 id="inventory-value">KSh 0</h3>
+            </div>
+
+        </section>
+<!-- ===============================
+     ADD NEW VEHICLE FORM
+=============================== -->
+
+<section class="inventory" style="margin-bottom: 30px;">
+
+    <h2>Add New Vehicle</h2>
+
+    <form id="add-vehicle-form">
+
+        <div style="margin-bottom: 15px;">
+            <label for="vehicle-name">Vehicle Name</label>
+            <input
+                type="text"
+                id="vehicle-name"
+                placeholder="e.g. BMW M4"
+                required
+                style="display:block; width:100%; padding:12px; margin-top:5px;"
+            >
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label for="vehicle-brand">Brand</label>
+            <input
+                type="text"
+                id="vehicle-brand"
+                placeholder="e.g. BMW"
+                required
+                style="display:block; width:100%; padding:12px; margin-top:5px;"
+            >
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label for="vehicle-price">Price (KSh)</label>
+            <input
+                type="number"
+                id="vehicle-price"
+                placeholder="e.g. 14500000"
+                min="0"
+                step="0.01"
+                required
+                style="display:block; width:100%; padding:12px; margin-top:5px;"
+            >
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label for="vehicle-image">Vehicle Image URL</label>
+            <input
+                type="url"
+                id="vehicle-image"
+                placeholder="https://example.com/car.jpg"
+                required
+                style="display:block; width:100%; padding:12px; margin-top:5px;"
+            >
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label for="vehicle-description">Description</label>
+            <textarea
+                id="vehicle-description"
+                placeholder="Describe the vehicle..."
+                required
+                rows="4"
+                style="display:block; width:100%; padding:12px; margin-top:5px;"
+            ></textarea>
+        </div>
+
+        <button
+            type="submit"
+            style="background:#101827; color:white; padding:12px 20px;"
+        >
+            Add Vehicle
+        </button>
+
+    </form>
+
+</section>
+        <section class="inventory">
+
+            <h2>Vehicle Inventory</h2>
+
+            <p id="status" class="status">Loading vehicles...</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Vehicle</th>
+                        <th>Brand</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="vehicle-table-body"></tbody>
+            </table>
+
+        </section>
+
+    </main>
+
+<!-- CUSTOMER INQUIRIES SECTION -->
+<section class="admin-section" id="customer-inquiries">
+    <h2>Customer Inquiries</h2>
+    <p>Messages submitted through the Apex Motors website.</p>
+
+    <button type="button" onclick="loadCustomerInquiries()">
+        Refresh Inquiries
+    </button>
+
+    <div style="overflow-x: auto; margin-top: 20px;">
+        <table>
+          <thead>
+    <tr>
+        <th>Date</th>
+        <th>Customer</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Message</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+</thead>
+
+           <tbody id="inquiries-table-body">
+    <tr>
+        <td colspan="7">Inquiries will appear here.</td>
+    </tr>
+</tbody>
+        </table>
+    </div>
+</section>
+
+    <script>
+        async function loadAdminVehicles() {
+            const tableBody = document.getElementById("vehicle-table-body");
+            const status = document.getElementById("status");
+
+            try {
+                const response = await fetch("http://localhost:3000/api/vehicles", {
+    credentials: "include"
+});
+
+                if (!response.ok) {
+                    throw new Error("Unable to retrieve vehicles.");
+                }
+
+                const vehicles = await response.json();
+
+                tableBody.innerHTML = "";
+
+                let totalValue = 0;
+
+                vehicles.forEach(function (vehicle) {
+                    totalValue += Number(vehicle.price) || 0;
+
+                    const row = document.createElement("tr");
+
+                    const imageCell = document.createElement("td");
+                    const image = document.createElement("img");
+
+                    image.src = vehicle.image;
+                    image.alt = vehicle.name;
+                    image.className = "vehicle-image";
+
+                    image.onerror = function () {
+                        this.style.display = "none";
+                    };
+
+                    imageCell.appendChild(image);
+
+                    const nameCell = document.createElement("td");
+                    nameCell.textContent = vehicle.name;
+
+                    const brandCell = document.createElement("td");
+                    brandCell.textContent = vehicle.brand;
+
+                    const priceCell = document.createElement("td");
+                    priceCell.textContent =
+                        "KSh " + Number(vehicle.price).toLocaleString("en-KE");
+
+                    const actionsCell = document.createElement("td");
+
+                    const editButton = document.createElement("button");
+                    editButton.textContent = "Edit";
+                    editButton.className = "edit-button";
+
+                    editButton.addEventListener("click", function () {
+                        editVehicle(vehicle);
+                    });
+
+                    const deleteButton = document.createElement("button");
+                    deleteButton.textContent = "Delete";
+                    deleteButton.className = "delete-button";
+
+                    deleteButton.addEventListener("click", function () {
+                        deleteVehicle(vehicle);
+                    });
+
+                    actionsCell.appendChild(editButton);
+                    actionsCell.appendChild(deleteButton);
+
+                    row.appendChild(imageCell);
+                    row.appendChild(nameCell);
+                    row.appendChild(brandCell);
+                    row.appendChild(priceCell);
+                    row.appendChild(actionsCell);
+
+                    tableBody.appendChild(row);
+                });
+
+                document.getElementById("total-vehicles").textContent =
+                    vehicles.length;
+
+                document.getElementById("inventory-value").textContent =
+                    "KSh " + totalValue.toLocaleString("en-KE");
+
+                status.textContent = vehicles.length
+                    ? "Inventory loaded successfully."
+                    : "No vehicles have been added yet.";
+
+            } catch (error) {
+                console.error(error);
+
+                status.textContent =
+                    "Could not load vehicles. Check that the backend is running.";
+            }
+        }
+
+        async function editVehicle(vehicle) {
+            const name = prompt("Enter vehicle name:", vehicle.name);
+
+            if (name === null) return;
+
+            const brand = prompt("Enter brand:", vehicle.brand);
+
+            if (brand === null) return;
+
+            const priceInput = prompt(
+                "Enter price in KSh:",
+                vehicle.price
+            );
+
+            if (priceInput === null) return;
+
+            const price = Number(priceInput);
+
+            if (
+                !name.trim() ||
+                !brand.trim() ||
+                priceInput.trim() === "" ||
+                !Number.isFinite(price) ||
+                price < 0
+            ) {
+                alert("Please enter a valid name, brand, and price.");
+                return;
+            }
+
+            try {
+                const response = await fetch(
+                    "http://localhost:3000/api/vehicles/" + vehicle.id,
+                    {
+                        method: "PUT",
+                        credentials: "include",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            name: name.trim(),
+                            brand: brand.trim(),
+                            price: price,
+                            image: vehicle.image,
+                            description: vehicle.description
+                        })
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error || "Unable to update vehicle.");
+                }
+
+                alert("Vehicle updated successfully!");
+                loadAdminVehicles();
+
+            } catch (error) {
+                console.error(error);
+                alert(error.message);
+            }
+        }
+
+        async function deleteVehicle(vehicle) {
+            const confirmed = confirm(
+                "Are you sure you want to delete " + vehicle.name + "?"
+            );
+
+            if (!confirmed) return;
+
+            try {
+                const response = await fetch(
+                    "http://localhost:3000/api/vehicles/" + vehicle.id,
+                    {
+                        method: "DELETE",
+                        credentials: "include",
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error || "Unable to delete vehicle.");
+                }
+
+                alert("Vehicle deleted successfully!");
+                loadAdminVehicles();
+
+            } catch (error) {
+                console.error(error);
+                alert(error.message);
+            }
+        }
+// ===============================
+// ADD A NEW VEHICLE
+// ===============================
+
+document.getElementById("add-vehicle-form").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const name = document.getElementById("vehicle-name").value.trim();
+    const brand = document.getElementById("vehicle-brand").value.trim();
+    const price = Number(document.getElementById("vehicle-price").value);
+    const image = document.getElementById("vehicle-image").value.trim();
+    const description = document.getElementById("vehicle-description").value.trim();
+
+    if (
+        !name ||
+        !brand ||
+        !image ||
+        !description ||
+        document.getElementById("vehicle-price").value.trim() === "" ||
+        !Number.isFinite(price) ||
+        price < 0
+    ) {
+        alert("Please enter valid details for all vehicle fields.");
+        return;
+    }
+
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.textContent = "Adding Vehicle...";
+
+    try {
+        const response = await fetch("http://localhost:3000/api/vehicles", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: name,
+                brand: brand,
+                price: price,
+                image: image,
+                description: description
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || "Failed to add vehicle.");
+        }
+
+        alert("Vehicle added successfully!");
+
+        event.target.reset();
+
+        await loadAdminVehicles();
+
+    } catch (error) {
+        console.error("Error adding vehicle:", error);
+
+        alert("Unable to add vehicle. Please check that your backend server is running.");
+    } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Add Vehicle";
+    }
+});
+
+async function checkAdminSession() {
+    try {
+        const response = await fetch(
+            "http://localhost:3000/api/admin/me",
+            {
+                credentials: "include"
+            }
+        );
+
+        if (!response.ok) {
+            window.location.href = "login.html";
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        alert("Cannot connect to the server. Please start the backend.");
+        return false;
+    }
+}
+
+       checkAdminSession().then((isLoggedIn) => {
+    if (isLoggedIn) {
+        loadAdminVehicles();
+    }
+});
+
+
+async function loadCustomerInquiries() {
+    const tableBody = document.getElementById(
+        "inquiries-table-body"
+    );
+
+    tableBody.innerHTML = `
+        <tr>
+            <td colspan="7">Loading inquiries...</td>
+        </tr>
+    `;
+
+    try {
+        const response = await fetch(
+            "http://localhost:3000/api/inquiries",
+            {
+                credentials: "include"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Could not load customer inquiries.");
+        }
+
+        const inquiries = await response.json();
+
+        tableBody.replaceChildren();
+
+        if (inquiries.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="7">
+                        No customer inquiries received yet.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        inquiries.forEach((inquiry) => {
+            const row = document.createElement("tr");
+
+            const values = [
+                inquiry.created_at || "N/A",
+                inquiry.name || "N/A",
+                inquiry.email || "N/A",
+                inquiry.phone || "N/A",
+                inquiry.message || "N/A"
+            ];
+
+            values.forEach((value) => {
+                const cell = document.createElement("td");
+                cell.textContent = value;
+                row.appendChild(cell);
+            });
+
+            // STATUS DROPDOWN
+            const statusCell = document.createElement("td");
+            const statusSelect = document.createElement("select");
+
+            ["Pending", "Contacted", "Resolved"].forEach((status) => {
+                const option = document.createElement("option");
+                option.value = status;
+                option.textContent = status;
+                statusSelect.appendChild(option);
+            });
+
+            statusSelect.value = [
+                "Pending",
+                "Contacted",
+                "Resolved"
+            ].includes(inquiry.status)
+                ? inquiry.status
+                : "Pending";
+
+            statusCell.appendChild(statusSelect);
+            row.appendChild(statusCell);
+
+            // SAVE BUTTON
+            const actionCell = document.createElement("td");
+            const saveButton = document.createElement("button");
+
+            saveButton.textContent = "Save Status";
+
+            saveButton.addEventListener("click", async () => {
+                saveButton.disabled = true;
+                saveButton.textContent = "Saving...";
+
+                try {
+                    const updateResponse = await fetch(
+                        `http://localhost:3000/api/inquiries/${inquiry.id}/status`,
+                        {
+                            method: "PUT",
+                            credentials: "include",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                status: statusSelect.value
+                            })
+                        }
+                    );
+
+                    const result = await updateResponse.json();
+
+                    if (!updateResponse.ok) {
+                        throw new Error(
+                            result.error || "Could not update status."
+                        );
+                    }
+
+                    saveButton.textContent = "Saved!";
+                } catch (error) {
+                    alert(error.message);
+                    saveButton.textContent = "Save Status";
+                } finally {
+                    saveButton.disabled = false;
+                }
+            });
+
+            actionCell.appendChild(saveButton);
+            row.appendChild(actionCell);
+
+            tableBody.appendChild(row);
+        });
+
+    } catch (error) {
+        console.error("Inquiry loading error:", error);
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="7">
+                    Failed to load inquiries. Check the backend
+                    and your admin login.
+                </td>
+            </tr>
+        `;
+    }
+}
+
+
+// AUTOMATICALLY REFRESH CUSTOMER INQUIRIES EVERY 30 SECONDS
+setInterval(() => {
+    const tableBody = document.getElementById(
+        "inquiries-table-body"
+    );
+
+    // Refresh only when the inquiries table exists
+    if (tableBody) {
+        loadCustomerInquiries();
+    }
+}, 30000);
+    </script>
+
+</body>
+</html>
