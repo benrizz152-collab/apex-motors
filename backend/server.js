@@ -22,6 +22,7 @@ app.use(cors({
 
 
 app.use(express.json());
+app.set("trust proxy", 1);
 
 
 app.use(session({
@@ -31,11 +32,12 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         httpOnly: true,
-        sameSite: "lax",
-        secure: false,
+        sameSite: "none",
+        secure: true,
         maxAge: 30 * 60 * 1000
     }
 }));
+
 
 
 // Home/test route
