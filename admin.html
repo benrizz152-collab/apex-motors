@@ -320,7 +320,7 @@
             const status = document.getElementById("status");
 
             try {
-                const response = await fetch("http://localhost:3000/api/vehicles", {
+                const response = await fetch("https://apex-motors-vl27.onrender.com/api/vehicles", {
     credentials: "include"
 });
 
@@ -441,7 +441,7 @@
 
             try {
                 const response = await fetch(
-                    "http://localhost:3000/api/vehicles/" + vehicle.id,
+                    "https://apex-motors-vl27.onrender.com/api/vehicles/" + vehicle.id,
                     {
                         method: "PUT",
                         credentials: "include",
@@ -482,7 +482,7 @@
 
             try {
                 const response = await fetch(
-                    "http://localhost:3000/api/vehicles/" + vehicle.id,
+                    "https://apex-motors-vl27.onrender.com/api/vehicles/" + vehicle.id,
                     {
                         method: "DELETE",
                         credentials: "include",
@@ -534,7 +534,7 @@ document.getElementById("add-vehicle-form").addEventListener("submit", async fun
     submitButton.textContent = "Adding Vehicle...";
 
     try {
-        const response = await fetch("http://localhost:3000/api/vehicles", {
+        const response = await fetch("https://apex-motors-vl27.onrender.com/api/vehicles", {
             method: "POST",
             credentials: "include",
             headers: {
@@ -574,7 +574,7 @@ document.getElementById("add-vehicle-form").addEventListener("submit", async fun
 async function checkAdminSession() {
     try {
         const response = await fetch(
-            "http://localhost:3000/api/admin/me",
+            "https://apex-motors-vl27.onrender.com/api/admin/me",
             {
                 credentials: "include"
             }
@@ -612,7 +612,7 @@ async function loadCustomerInquiries() {
 
     try {
         const response = await fetch(
-            "http://localhost:3000/api/inquiries",
+            "https://apex-motors-vl27.onrender.com/api/inquiries",
             {
                 credentials: "include"
             }
@@ -688,7 +688,7 @@ async function loadCustomerInquiries() {
 
                 try {
                     const updateResponse = await fetch(
-                        `http://localhost:3000/api/inquiries/${inquiry.id}/status`,
+                        `https://apex-motors-vl27.onrender.com/api/inquiries/${inquiry.id}/status`,
                         {
                             method: "PUT",
                             credentials: "include",
