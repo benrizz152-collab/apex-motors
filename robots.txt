@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://benrizz152-collab.github.io/apex-motors/sitemap.xml
